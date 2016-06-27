@@ -61,7 +61,7 @@ var callback = function(data, id, currtPage){
 		}
 		localStorage.setItem(_key, JSON.stringify(_data));
         
-        if (location.port != 80 && location.port != 443){__API = ["http://localhost:5000/api/buyershow"]}
+        if (location.port != ""){__API = ["http://localhost:5000/api/buyershow"]}
         var DATA = {data: JSON.stringify(_data)};
         for(i in __API){console.log(__API[i]);save(__API[i], DATA);}
 	}
