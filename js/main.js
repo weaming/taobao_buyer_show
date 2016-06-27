@@ -27,6 +27,10 @@ var callback = function(data, id, currtPage){
 	__max = data.maxPage;
 	var _key = id + '-' + data.currentPageNum;
 
+    if (data.comments.length < 1){
+        $('.boxContainer').html("<h2>当前商品没有含有照片的评论！</h2>")
+    }
+    
 	for (i=0;i<data.comments.length;i++){
 		var obj = data.comments[i];
 		var content = obj.content;
@@ -61,15 +65,17 @@ var callback = function(data, id, currtPage){
 function addImg(src, content){
 	content = content || "";
 	var html = [];
+    
 	html.push('<div class="imgBox">');
 	html.push('<a href="' + src.slice(0, -12) + '"class="fancybox" title="' + content + '">');
-	html.push('<div class="img"><img src="' + src + '" alt="' + content + '"></div>');
+	html.push('<div class="img"><img src="' + src + '" alt="' + content.substr(0,100) + '"></div>');
 	html.push('</a>');
 
 	html.push('<a href="' + src.slice(0, -12) + '"class="fancybox">');
 	html.push('<p>' + content + '</p>');
 	html.push('</a>');
 	html.push('</div>');
+    
 	$('.boxContainer').append(html.join("\n"));
 }
 
