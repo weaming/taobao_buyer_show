@@ -1,7 +1,8 @@
 html{font-family: Helvetica, Arial, sans-serif;}
+* {box-sizing: border-box;}
 
 #header{
-	width: 60vw;
+	width: 80vw;
 	margin: 1rem auto;
 }
 #header .button{
@@ -18,22 +19,20 @@ html{font-family: Helvetica, Arial, sans-serif;}
 
 
 .boxContainer{
-	width: 60vw;
+	width: 80vw;
 	margin: 0 auto;
 	display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: stretch;
+    flex-flow: row wrap;
+    justify-content: flex-start;
 }
 .boxContainer .imgBox{
-	width: 22%;
+	width: 19%;
 	border: 1px solid #ccc;
 	padding: 0.3rem;
-	margin: 0.2rem auto;
+	margin: 0.2rem;
 }
 .boxContainer .imgBox div.img{
-	height: 300px;
+	height: 18vw;
 	overflow:hidden;
 }
 .boxContainer .imgBox img{
@@ -52,7 +51,7 @@ html{font-family: Helvetica, Arial, sans-serif;}
 	color: #666;
 }
 .boxContainer .imgBox p{
-	overflow:hidden;
+	overflow: hidden;
     font-size: 14px;
     line-height: 14px;
 	height: 14px;
