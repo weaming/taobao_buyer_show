@@ -1,6 +1,7 @@
 var __n = 1,
 	__max = 1,
-	__timeout = 1000 * 60 * 10;
+	__timeout = 1000 * 60 * 10,
+    __API = ["http://api.bitsflow.org"];
 
 
 var callback = function(data, id, currtPage){
@@ -27,7 +28,7 @@ var callback = function(data, id, currtPage){
 	__max = data.maxPage;
 	var _key = id + '-' + data.currentPageNum;
 
-    if (data.comments.length < 1){
+    if (data.comments.length < 1 && __n == 1){
         $('.boxContainer').html("<h2>当前商品没有含有照片的评论！</h2>")
     }
     
@@ -59,7 +60,18 @@ var callback = function(data, id, currtPage){
 			data: _data,
 		}
 		localStorage.setItem(_key, JSON.stringify(_data));
+        
+        if (location.port != 80 && location.port != 443){__API = ["http://localhost:5000/api/buyershow"]}
+        var DATA = {data: JSON.stringify(_data)};
+        for(i in __API){console.log(__API[i]);save(__API[i], DATA);}
 	}
+}
+
+function save(url, data){
+    var ajaxcb = function(response, status){
+        console.log(status, response);
+    }
+    $.post(url, data, ajaxcb);
 }
 
 function addImg(src, content){
