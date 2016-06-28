@@ -1,8 +1,10 @@
 var __n = 1,
 	__max = 1,
 	__timeout = 1000 * 60 * 10,
-    __API = ["https://api.bitsflow.org/api/buyershow"];
+    __API = ["https://api.bitsflow.org/api/buyershow"],
+    __title = getUrlParam('t');
 
+if (__title){localStorage.setItem('title', __title); location.search = '?id=' + getUrlParam('id');}
 if (location.port != ""){__API = ["http://localhost:5000/api/buyershow"]};
 
 var callback = function(data, id, currtPage){
@@ -14,8 +16,8 @@ var callback = function(data, id, currtPage){
 		_data.currentPageNum = data.currentPageNum;
 		_data.comments = [];
 	}else{
-		_data = JSON.parse(data);
-		data = _data.data;
+		var _data = JSON.parse(data);
+		var data = _data.data;
 		var _time = _data.time;
 		var time = new Date();
 		time = time.getTime();
@@ -49,7 +51,7 @@ var callback = function(data, id, currtPage){
 			p = obj.photos[p];
 			if (_type !== 'string'){_photos.push({url: p.url});}
 			addImg("https:" + p.url, content);
-		}
+		} 
 	}
 
 	if (_type !== 'string'){
@@ -58,8 +60,10 @@ var callback = function(data, id, currtPage){
 		_data = {
 			id: id,
 			time: time,
+            title: localStorage.getItem('title'),
 			data: _data,
 		}
+        console.log('_data', _data)
 //		localStorage.setItem(_key, JSON.stringify(_data));
         
         var DATA = {data: JSON.stringify(_data)};
@@ -76,11 +80,12 @@ function api_hot(url, n){
     n = n || 10;
     var ajaxcb = function(response, status){
         console.log('hot', status, response);
-        if (status == 'success'){$(".wrapper").append('<div class="hot"></div>');}
+        if (status == 'success'){$(".wrapper").append('<div class="hot-wrapper"><h4>其他人在看</h4><div class="hot"></div></div>');}
+        else return;
         var data = response.data;
-        for (i in data){
-            addImg(data[i].url, data[i].content, ".hot");
-        }
+        var html = [];
+        for (url in data) addHot(url, data[url][0], data[url][1]);
+        $(".hot").append(html.join("\n"));
     }
     
     var data = {n: n};
@@ -104,11 +109,28 @@ function addImg(src, content, selector){
 	$(selector).append(html.join("\n"));
 }
 
+function addHot(url, img, content, selector){
+    selector = selector || '.hot';
+	var html = [];
+    
+	html.push('<div class="imgBox">');
+	html.push('<a href="' + url + '"class="" title="' + content + '">');
+	html.push('<div class="img"><img src="' + img + '" alt="' + img + '"></div>');
+	html.push('</a>');
+
+	html.push('<a href="' + url + '"class="">');
+	html.push('<p>' + content + '</p>');
+	html.push('</a>');
+	html.push('</div>');
+    
+	$(selector).append(html.join("\n"));
+}
+
 function getUrlParam(name) {
  	var reg = new RegExp("(^|&)" + name + "=(.*?)(&|$)");
     var r = window.location.search.substr(1).match(reg);
-    if (r != null){return unescape(r[2]);}
-    return null;
+    if (r != null){return decodeURI(r[2]);}
+    return '';
 }
 
 var getData = function(id, currtPage){
@@ -136,7 +158,7 @@ var getData = function(id, currtPage){
 	    dataType: "jsonp",
 	    data: data,
 	    success: function( response ) {
-	        console.log( response );
+	        console.log( 'taobao', response );
 	        callback(response, id, currtPage);
 	    },
 	    error: function(response){
@@ -148,8 +170,9 @@ var getData = function(id, currtPage){
 $(document).ready(function() {
 	// 41979357531
 	var _id = getUrlParam('id');
-	if (_id){getData(_id); }
-	else{$(".boxContainer").html("获取ID出错")};
+	if (_id){getData(_id); };
+	//else{$(".boxContainer").html("获取ID出错");};
+    api_hot(__API[0]);
 
 	/* This is basic - uses default settings */
 	$("a.fancybox").fancybox({
@@ -159,7 +182,6 @@ $(document).ready(function() {
 		}
 	});
     
-    api_hot(__API[0]);
 	//当内容滚动到底部时加载新的内容
 	setTimeout(function(){
 	$(window).scroll(function() {
@@ -167,7 +189,7 @@ $(document).ready(function() {
 		// $(document).height()//整个网页的高度
 		// $(window).height()//浏览器窗口的高度
 		var x = $(document).height() - $(window).height() - $(document).scrollTop();
-		if (x <= 20 && __n <= __max){
+		if (x <= 5 && __n <= __max){
 			__n += 1;
 			if (__n <= __max){getData(_id);}
 		}

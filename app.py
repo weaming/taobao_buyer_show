@@ -1,12 +1,12 @@
 # coding: utf-8
 from __future__ import print_function, unicode_literals, with_statement, absolute_import, division
 
-import json
+import json, random
 from flask import Flask, request, make_response, render_template, jsonify
 import redis
 
 app = Flask(__name__)
-r = redis.Redis(host='192.168.22.158',port=6379,db=0)
+r = redis.Redis(host='192.168.123.250',port=6379,db=0)
 
 @app.route('/')
 def hello_world():
@@ -15,14 +15,21 @@ def hello_world():
 @app.route('/api/buyershow', methods=['POST', 'GET'])
 def buyershow():
     if request.method == 'GET':
-        _redis_keys = r.keys()[:10]
-        print(_redis_keys)
-        rt = {"data":[
-            {
-                "url": "https://img.alicdn.com/imgextra/i1/127950229301106397/TB2hMw1pFXXXXXjXpXXXXXXXXXX_!!0-rate.jpg_400x400.jpg",
-                "content": "ssss"
-            },
-        ]}
+        _redis_keys = [r.srandmember('buyershow:ids') for i in xrange(20)]
+        _redis_keys = set(_redis_keys)
+        data_id = list(_redis_keys)[:5*2]
+        objs = [json.loads(r.get('buyershow:id:%s:page:1' % id)) for id in data_id]
+        data_title = [obj.get('title', '') for obj in objs]
+        data_url = ['?id={}&t={}'.format(id, title) for id,title in zip(data_id, data_title)]
+        data_img = [obj['data']['comments'][0]['photos'][0]['url'] for obj in objs]
+        
+        __data = dict(zip(data_url, zip(data_img, data_title)))
+        print(__data)
+        rt = {
+            'status': 'success',
+            'len': len(data_id),
+            'data': __data
+        }
         resp = jsonify(rt)
         resp.headers["Access-Control-Allow-Origin"] = '*'
         return resp
@@ -32,7 +39,8 @@ def buyershow():
         data = form.get('data', '')
         #print(data)
         __data = json.loads(data)
-        db_result = r.set('buyershow:id:%s:page:%s' % (__data['id'], __data['data']['currentPageNum']), data)
+        db_page = r.set('buyershow:id:%s:page:%s' % (__data['id'], __data['data']['currentPageNum']), data)
+        db_ids = r.sadd('buyershow:ids', __data['id'])
         rt = {
             'status': 'success'
         }

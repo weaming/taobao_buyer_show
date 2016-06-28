@@ -1,5 +1,12 @@
 html{font-family: Helvetica, Arial, sans-serif;}
 * {box-sizing: border-box;}
+body{
+    width: 960px;
+    margin: auto;
+    color: #eee;
+    background-color: #6c7989;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAeCAYAAABNChwpAAAAWklEQVRIS2N89OiRlH/ZXAYY2NiVzEBPPqNhRL0UyFIYAFlOT/7AO2A0CgY8DYxGwWgUDHgIDLgDRnPBaBQMeAgMuANGc8FoFAx4CAy4A0ZzwWgUDHgIDLQDAD4U1pFowybWAAAAAElFTkSuQmCC);
+}
 
 #header{
 	width: 960px;
@@ -17,6 +24,13 @@ html{font-family: Helvetica, Arial, sans-serif;}
 	background: #f60;
 }
 
+.hot-wrapper{
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 30px 2px 20px;
+}
+
 .hot,
 .boxContainer{
 	width: 960px;
@@ -25,40 +39,53 @@ html{font-family: Helvetica, Arial, sans-serif;}
     flex-flow: row wrap;
     justify-content: flex-start;
 }
+
+.hot .imgBox,
 .boxContainer .imgBox{
 	width: 19%;
 	border: 1px solid #ccc;
+    border-radius: 3px;
 	padding: 0.3rem;
 	margin: 0.2rem;
 }
+
+.hot .imgBox div.img,
 .boxContainer .imgBox div.img{
-	height: 180px;
-    width: auto;
+	height: 170px;
+    width: 170px;
 	overflow: hidden;
 }
+
+.hot .imgBox img,
 .boxContainer .imgBox img{
+    transform: translate(calc(-50% + 85px) , calc(-50% + 85px));
+	transition: transform 0.5s ease-out;
     min-width: 100%;
     min-height: 100%;
-    max-height: 135%;
-    max-width: 135%;
-	transition: 0.5s ease;
-    transform: translate(calc(-50% + 90px) , calc(-50% + 90px));
+    max-height: 150%;
+    max-width: 150%;
 }
+
+.hot .imgBox img:hover,
 .boxContainer .imgBox img:hover{
-    transform: scale(1.2) translate(calc(-50% + 90px) , calc(-50% + 90px));
+    transform: translate(calc(-50% + 85px) , calc(-50% + 85px)) scale(1.2);
 	transition: 0.5s ease;
 }
+
+.hot .imgBox a,
 .boxContainer .imgBox a{
 	margin: 0.2rem 0;
 	text-align: center;
 	text-decoration: none;
-	color: #666;
+	color: #eee;
 }
+
+.hot .imgBox p,
 .boxContainer .imgBox p{
 	overflow: hidden;
     font-size: 14px;
-    line-height: 14px;
-	height: 14px;
+    line-height: 15px;
+	max-height: 30px;
 	width: 100%;
 	margin: 0.1rem auto;
 }

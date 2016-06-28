@@ -7,8 +7,8 @@
 </head>
 <body>
 <div id="header">
-	<a class="button" href="javascript:!function(){var l=location,d=document,o=encodeURIComponent,id=(l.search.match(/[?&]id=(\d+)/i)||[])[1],t=o(d.title);open('https://weaming.github.io/buyershow/?id='+(id?id:''))}();">买家秀</a>
-	<a class="button" href="javascript:!function(){var l=location,d=document,o=encodeURIComponent,id=(l.search.match(/[?&]id=(\d+)/i)||[])[1],t=o(d.title);open('https://item.taobao.com/item.htm?id='+(id?id:''))}();">返回淘宝</a>
+	<a class="button" href="javascript:!function(){var l=location,d=document,o=encodeURIComponent,id=(l.search.match(/[?&]id=(\d+)/i)||[])[1],t=o(d.title),c='id='+(id?id:'')+'&t='+(t?t:'');open('https://weaming.github.io/buyershow/?'+c)}();">买家秀</a>
+	<a class="button" href="javascript:!function(){var l=location,d=document,o=encodeURIComponent,id=(l.search.match(/[?&]id=(\d+)/i)||[])[1];open('https://item.taobao.com/item.htm?id='+(id?id:''))}();">返回淘宝</a>
     <p>↑ 拖动“买家秀”到浏览器书签，在淘宝商品页面点击此书签即可！</p>
 </div>
 
