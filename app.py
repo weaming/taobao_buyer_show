@@ -25,7 +25,7 @@ def buyershow():
         data_id = list(_redis_keys)[:5*2]
         try:
             objs = [json.loads(r.get('buyershow:id:%s:page:1' % id)) for id in data_id]
-            data_title = [obj.get('title', '') for obj in objs]
+            data_title = [obj.get('title', '') or '' for obj in objs]
             data_url = ['?id={}&t={}'.format(id, title) for id,title in zip(data_id, data_title)]
             data_img = [obj['data']['comments'][0]['photos'][0]['url'] for obj in objs]
             __data = dict(zip(data_url, zip(data_img, data_title)))
