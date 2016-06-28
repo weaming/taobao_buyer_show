@@ -58,7 +58,6 @@ body{
 
 .hot .imgBox img,
 .boxContainer .imgBox img{
-    transform: translate(calc(-50% + 85px) , calc(-50% + 85px));
 	transition: transform 0.5s ease-out;
     min-width: 100%;
     min-height: 100%;
@@ -68,7 +67,7 @@ body{
 
 .hot .imgBox img:hover,
 .boxContainer .imgBox img:hover{
-    transform: translate(calc(-50% + 85px) , calc(-50% + 85px)) scale(1.2);
+    transform: scale(1.2);
 	transition: 0.5s ease;
 }
 
