@@ -6,7 +6,7 @@ from flask import Flask, request, make_response, render_template, jsonify
 import redis
 
 app = Flask(__name__)
-app.debug = True
+app.debug = False
 redis_host = '127.0.0.1'
 if app.debug:
     redis_host = '192.168.123.250'
@@ -24,7 +24,8 @@ def buyershow():
         _redis_keys = set(_redis_keys)
         data_id = list(_redis_keys)[:5*2]
         try:
-            objs = [json.loads(r.get('buyershow:id:%s:page:1' % id)) for id in data_id]
+            values = filter(None, [r.get('buyershow:id:%s:page:1' % id) for id in data_id])
+            objs = [json.loads(value) for value in values]
             data_title = [obj.get('title', '') or '' for obj in objs]
             data_url = ['?id={}&t={}'.format(id, title) for id,title in zip(data_id, data_title)]
             data_img = [obj['data']['comments'][0]['photos'][0]['url'] for obj in objs]
