@@ -6,7 +6,11 @@ from flask import Flask, request, make_response, render_template, jsonify
 import redis
 
 app = Flask(__name__)
-r = redis.Redis(host='192.168.123.250',port=6379,db=0)
+app.debug = True
+redis_host = '127.0.0.1'
+if app.debug:
+    redis_host = '192.168.123.250'
+r = redis.Redis(host=redis_host,port=6379,db=0)
 
 @app.route('/')
 def hello_world():
@@ -22,9 +26,8 @@ def buyershow():
         data_title = [obj.get('title', '') for obj in objs]
         data_url = ['?id={}&t={}'.format(id, title) for id,title in zip(data_id, data_title)]
         data_img = [obj['data']['comments'][0]['photos'][0]['url'] for obj in objs]
-        
+
         __data = dict(zip(data_url, zip(data_img, data_title)))
-        print(__data)
         rt = {
             'status': 'success',
             'len': len(data_id),
@@ -37,7 +40,6 @@ def buyershow():
     if request.method == 'POST':
         form = request.form
         data = form.get('data', '')
-        #print(data)
         __data = json.loads(data)
         db_page = r.set('buyershow:id:%s:page:%s' % (__data['id'], __data['data']['currentPageNum']), data)
         db_ids = r.sadd('buyershow:ids', __data['id'])
@@ -56,6 +58,9 @@ def hot():
         return resp
 
 if __name__ == '__main__':
-    host = '0.0.0.0'
-    app.debug = True
-    app.run(host)
+    host = '127.0.0.1'
+    port = 8004
+    if app.debug:
+        host = '0.0.0.0'
+        port = 5000
+    app.run(host, port)
