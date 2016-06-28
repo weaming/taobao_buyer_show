@@ -3,6 +3,7 @@ var __n = 1,
 	__timeout = 1000 * 60 * 10,
     __API = ["https://api.bitsflow.org/api/buyershow"];
 
+if (location.port != ""){__API = ["http://localhost:5000/api/buyershow"]};
 
 var callback = function(data, id, currtPage){
 	var _type = typeof data;
@@ -59,23 +60,35 @@ var callback = function(data, id, currtPage){
 			time: time,
 			data: _data,
 		}
-		localStorage.setItem(_key, JSON.stringify(_data));
+//		localStorage.setItem(_key, JSON.stringify(_data));
         
-        if (location.port != ""){__API = ["http://localhost:5000/api/buyershow"]}
         var DATA = {data: JSON.stringify(_data)};
-        for(i in __API){console.log(__API[i]);save(__API[i], DATA);}
+        for(i in __API){console.log(__API[i]);api_save(__API[i], DATA);}
 	}
 }
 
-function save(url, data){
-    var ajaxcb = function(response, status){
-        console.log(status, response);
-    }
+function api_save(url, data){
+    var ajaxcb = function(response, status){console.log('save', status, response);}
     $.post(url, data, ajaxcb);
 }
 
-function addImg(src, content){
-	content = content || "";
+function api_hot(url, n){
+    n = n || 10;
+    var ajaxcb = function(response, status){
+        console.log('hot', status, response);
+        if (status == 'success'){$(".wrapper").append('<div class="hot"></div>');}
+        var data = response.data;
+        for (i in data){
+            addImg(data[i].url, data[i].content, ".hot");
+        }
+    }
+    
+    var data = {n: n};
+    $.get(url, data, ajaxcb);
+}
+
+function addImg(src, content, selector){
+    selector = selector || '.boxContainer';
 	var html = [];
     
 	html.push('<div class="imgBox">');
@@ -88,10 +101,10 @@ function addImg(src, content){
 	html.push('</a>');
 	html.push('</div>');
     
-	$('.boxContainer').append(html.join("\n"));
+	$(selector).append(html.join("\n"));
 }
 
- function getUrlParam(name) {
+function getUrlParam(name) {
  	var reg = new RegExp("(^|&)" + name + "=(.*?)(&|$)");
     var r = window.location.search.substr(1).match(reg);
     if (r != null){return unescape(r[2]);}
@@ -136,7 +149,7 @@ $(document).ready(function() {
 	// 41979357531
 	var _id = getUrlParam('id');
 	if (_id){getData(_id); }
-	else{document.write("获取ID出错")};
+	else{$(".boxContainer").html("获取ID出错")};
 
 	/* This is basic - uses default settings */
 	$("a.fancybox").fancybox({
@@ -146,8 +159,7 @@ $(document).ready(function() {
 		}
 	});
     
-    $('.boxContainer .imgBox img:hover').animate({transform: "scale(1.2)"})
-
+    api_hot(__API[0]);
 	//当内容滚动到底部时加载新的内容
 	setTimeout(function(){
 	$(window).scroll(function() {

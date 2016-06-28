@@ -17,7 +17,7 @@ html{font-family: Helvetica, Arial, sans-serif;}
 	background: #f60;
 }
 
-
+.hot,
 .boxContainer{
 	width: 960px;
 	margin: 0 auto;
@@ -33,7 +33,7 @@ html{font-family: Helvetica, Arial, sans-serif;}
 }
 .boxContainer .imgBox div.img{
 	height: 180px;
-    width: 180px;
+    width: auto;
 	overflow: hidden;
 }
 .boxContainer .imgBox img{
