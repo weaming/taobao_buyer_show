@@ -1,7 +1,7 @@
 var __n = 1,
 	__max = 1,
 	__timeout = 1000 * 60 * 10,
-    __API = ["http://api.bitsflow.org"];
+    __API = ["https://api.bitsflow.org/api/buyershow"];
 
 
 var callback = function(data, id, currtPage){
@@ -80,7 +80,7 @@ function addImg(src, content){
     
 	html.push('<div class="imgBox">');
 	html.push('<a href="' + src.slice(0, -12) + '"class="fancybox" title="' + content + '">');
-	html.push('<div class="img"><img src="' + src + '" alt="' + content.substr(0,100) + '"></div>');
+	html.push('<div class="img"><img src="' + src + '" alt="' + content.substr(0,70) + '"></div>');
 	html.push('</a>');
 
 	html.push('<a href="' + src.slice(0, -12) + '"class="fancybox">');
@@ -145,6 +145,8 @@ $(document).ready(function() {
 			this.title = $(this.element).find('img').attr('alt');
 		}
 	});
+    
+    $('.boxContainer .imgBox img:hover').animate({transform: "scale(1.2)"})
 
 	//当内容滚动到底部时加载新的内容
 	setTimeout(function(){

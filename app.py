@@ -12,6 +12,9 @@ def hello_world():
 
 @app.route('/api/buyershow', methods=['POST', 'GET'])
 def buyershow():
+    if request.method == 'GET':
+        return "GET method not allowed."
+
     if request.method == 'POST':
         form = request.form
         data = form.get('data', '')
@@ -23,10 +26,12 @@ def buyershow():
         resp = jsonify(rt)
         resp.headers["Access-Control-Allow-Origin"] = '*'
         return resp
-    
-    if request.method == 'GET':
-        return "GET method not allowed."
 
+@app.route('/api/buyershow', methods=['GET'])
+def hot():
+    if request.method == 'GET':
+        resp = ""
+        return resp
 
 if __name__ == '__main__':
     host = '0.0.0.0'
