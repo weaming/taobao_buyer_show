@@ -32,9 +32,10 @@ var callback = function(data, id, currtPage){
 	var _key = id + '-' + data.currentPageNum;
 
     if (data.comments.length < 1 && __n == 1){
-        $('.boxContainer').html("<h2>当前商品没有含有照片的评论！</h2>")
+        $('.boxContainer').html("<h2>当前商品没有含有照片的评论！</h2>");
+        return;
     }
-    
+
 	for (i=0;i<data.comments.length;i++){
 		var obj = data.comments[i];
 		var content = obj.content;
@@ -51,7 +52,7 @@ var callback = function(data, id, currtPage){
 			p = obj.photos[p];
 			if (_type !== 'string'){_photos.push({url: p.url});}
 			addImg("https:" + p.url, content);
-		} 
+		}
 	}
 
 	if (_type !== 'string'){
@@ -64,8 +65,8 @@ var callback = function(data, id, currtPage){
 			data: _data,
 		}
         console.log('_data', _data)
-//		localStorage.setItem(_key, JSON.stringify(_data));
-        
+		localStorage.setItem(_key, JSON.stringify(_data));
+
         var DATA = {data: JSON.stringify(_data)};
         for(i in __API){console.log(__API[i]);api_save(__API[i], DATA);}
 	}
@@ -87,7 +88,7 @@ function api_hot(url, n){
         for (url in data) addHot(url, data[url][0], data[url][1]);
         $(".hot").append(html.join("\n"));
     }
-    
+
     var data = {n: n};
     $.get(url, data, ajaxcb);
 }
@@ -95,7 +96,7 @@ function api_hot(url, n){
 function addImg(src, content, selector){
     selector = selector || '.boxContainer';
 	var html = [];
-    
+
 	html.push('<div class="imgBox">');
 	html.push('<a href="' + src.slice(0, -12) + '"class="fancybox" title="' + content + '">');
 	html.push('<div class="img"><img src="' + src + '" alt="' + content.substr(0,70) + '"></div>');
@@ -105,14 +106,14 @@ function addImg(src, content, selector){
 	html.push('<p>' + content + '</p>');
 	html.push('</a>');
 	html.push('</div>');
-    
+
 	$(selector).append(html.join("\n"));
 }
 
 function addHot(url, img, content, selector){
     selector = selector || '.hot';
 	var html = [];
-    
+
 	html.push('<div class="imgBox">');
 	html.push('<a href="' + url + '"class="" title="' + content + '">');
 	html.push('<div class="img"><img src="' + img + '" alt="' + img + '"></div>');
@@ -122,7 +123,7 @@ function addHot(url, img, content, selector){
 	html.push('<p>' + content + '</p>');
 	html.push('</a>');
 	html.push('</div>');
-    
+
 	$(selector).append(html.join("\n"));
 }
 
@@ -181,7 +182,7 @@ $(document).ready(function() {
 			this.title = $(this.element).find('img').attr('alt');
 		}
 	});
-    
+
 	//当内容滚动到底部时加载新的内容
 	setTimeout(function(){
 	$(window).scroll(function() {

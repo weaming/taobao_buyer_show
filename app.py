@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import print_function, unicode_literals, with_statement, absolute_import, division
 
-import json, random
+import json, random, traceback
 from flask import Flask, request, make_response, render_template, jsonify
 import redis
 
@@ -19,16 +19,21 @@ def hello_world():
 @app.route('/api/buyershow', methods=['POST', 'GET'])
 def buyershow():
     if request.method == 'GET':
+        rt = None
         _redis_keys = [r.srandmember('buyershow:ids') for i in xrange(20)]
         _redis_keys = set(_redis_keys)
         data_id = list(_redis_keys)[:5*2]
-        objs = [json.loads(r.get('buyershow:id:%s:page:1' % id)) for id in data_id]
-        data_title = [obj.get('title', '') for obj in objs]
-        data_url = ['?id={}&t={}'.format(id, title) for id,title in zip(data_id, data_title)]
-        data_img = [obj['data']['comments'][0]['photos'][0]['url'] for obj in objs]
+        try:
+            objs = [json.loads(r.get('buyershow:id:%s:page:1' % id)) for id in data_id]
+            data_title = [obj.get('title', '') for obj in objs]
+            data_url = ['?id={}&t={}'.format(id, title) for id,title in zip(data_id, data_title)]
+            data_img = [obj['data']['comments'][0]['photos'][0]['url'] for obj in objs]
+            __data = dict(zip(data_url, zip(data_img, data_title)))
+        except:
+            log = traceback.format_exc()
+            rt = {'status': 'fail', 'log': log}
 
-        __data = dict(zip(data_url, zip(data_img, data_title)))
-        rt = {
+        rt = rt or {
             'status': 'success',
             'len': len(data_id),
             'data': __data
