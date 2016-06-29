@@ -83,7 +83,6 @@ $(document).ready(function() {
 	}
 
 	function api_save(url, data){
-        if (!data.data.title){console.log('save error: no title.');return;};
 	    var ajaxcb = function(response, status){console.log('save', status, response);}
 	    $.post(url, data, ajaxcb);
 	}
