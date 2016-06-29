@@ -16,7 +16,7 @@ function getUrlParam(name) {
 
 $(document).ready(function() {
 	var callback = function(data, id, currtPage){
-		var _type = typeof data;
+		var _type = typeof(data);
 		if (_type !== 'string'){
 			var _data = {};
 			_data.total = data.total;
@@ -34,7 +34,7 @@ $(document).ready(function() {
 				getData(_data.id, data.currentPageNum);
 				return;
 			}
-			console.log(_data)
+			console.log('localStorage', _data)
 		}
 		__max = data.maxPage;
 		var _key = id + '-' + data.currentPageNum;
@@ -89,7 +89,8 @@ $(document).ready(function() {
 	    n = n || 10;
 	    var ajaxcb = function(response, status){
 	        console.log('hot', status, response);
-	        if (status == 'success'){$(".wrapper").append('<div class="hot-wrapper"><h4>其他人在看</h4><div class="hot"></div></div>');}
+	        if (status == 'success' && response.status == 'success'){
+                $(".wrapper").append('<div class="hot-wrapper"><h4>其他人在看</h4><div class="hot"></div></div>');}
 	        else return;
 	        var data = response.data;
 	        var html = [];
@@ -164,7 +165,8 @@ $(document).ready(function() {
 		        callback(response, id, currtPage);
 		    },
 		    error: function(response){
-		        console.log( response );
+		        console.log( 'taobao_error', response );
+                $('.boxContainer').html("<h2>网络错误！</h2>");
 		    }
 		});
 	}

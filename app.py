@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import print_function, unicode_literals, with_statement, absolute_import, division
 
-import json, random, traceback
+import json, random, traceback, time
 from flask import Flask, request, make_response, render_template, jsonify
 import redis
 
@@ -18,6 +18,7 @@ def hello_world():
 
 @app.route('/api/buyershow', methods=['POST', 'GET'])
 def buyershow():
+    time_start = time.time()
     if request.method == 'GET':
         rt = None
         _redis_keys = [r.srandmember('buyershow:ids') for i in xrange(20)]
@@ -28,7 +29,12 @@ def buyershow():
             objs = [json.loads(value) for value in values]
             data_title = [obj.get('title', '') or '' for obj in objs]
             data_url = ['?id={}&t={}'.format(id, title) for id,title in zip(data_id, data_title)]
-            data_img = [obj['data']['comments'][0]['photos'][0]['url'] for obj in objs]
+            data_img = []
+            for obj in objs:
+                try:
+                    data_img.append(obj['data']['comments'][0]['photos'][0]['url'])
+                except:
+                    pass
             __data = dict(zip(data_url, zip(data_img, data_title)))
         except:
             log = traceback.format_exc()
@@ -39,6 +45,7 @@ def buyershow():
             'len': len(data_id),
             'data': __data
         }
+        rt.update('usetime': '{0:.3f}'.format(time.time() - time_start))
         resp = jsonify(rt)
         resp.headers["Access-Control-Allow-Origin"] = '*'
         return resp
@@ -47,11 +54,11 @@ def buyershow():
         form = request.form
         data = form.get('data', '')
         __data = json.loads(data)
-        db_page = r.set('buyershow:id:%s:page:%s' % (__data['id'], __data['data']['currentPageNum']), data)
-        db_ids = r.sadd('buyershow:ids', __data['id'])
-        rt = {
-            'status': 'success'
-        }
+        if __data.get('id', None) and __data.get('title', None) and __data.get('len', 0) > 0:
+            db_page = r.set('buyershow:id:%s:page:%s' % (__data['id'], __data['data']['currentPageNum']), data)
+            db_ids = r.sadd('buyershow:ids', __data['id'])
+            rt = {'status': 'success'}
+        rt.update('usetime': '{0:.3f}'.format(time.time() - time_start))
         #resp = make_response(json.dumps(rt, ensure_ascii=False), 200)
         resp = jsonify(rt)
         resp.headers["Access-Control-Allow-Origin"] = '*'
