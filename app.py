@@ -45,7 +45,7 @@ def buyershow():
             'len': len(data_id),
             'data': __data
         }
-        rt.update('usetime': '{0:.3f}'.format(time.time() - time_start))
+        rt.update({'usetime': '{0:.3f}'.format(time.time() - time_start)})
         resp = jsonify(rt)
         resp.headers["Access-Control-Allow-Origin"] = '*'
         return resp
@@ -58,7 +58,7 @@ def buyershow():
             db_page = r.set('buyershow:id:%s:page:%s' % (__data['id'], __data['data']['currentPageNum']), data)
             db_ids = r.sadd('buyershow:ids', __data['id'])
             rt = {'status': 'success'}
-        rt.update('usetime': '{0:.3f}'.format(time.time() - time_start))
+        rt.update({'usetime': '{0:.3f}'.format(time.time() - time_start)})
         #resp = make_response(json.dumps(rt, ensure_ascii=False), 200)
         resp = jsonify(rt)
         resp.headers["Access-Control-Allow-Origin"] = '*'
