@@ -54,10 +54,12 @@ def buyershow():
         form = request.form
         data = form.get('data', '')
         __data = json.loads(data)
-        if __data.get('id', None) and __data.get('title', None) and __data.get('len', 0) > 0:
+        if __data.get('title', None): 
             db_page = r.set('buyershow:id:%s:page:%s' % (__data['id'], __data['data']['currentPageNum']), data)
             db_ids = r.sadd('buyershow:ids', __data['id'])
             rt = {'status': 'success'}
+        else:
+            rt = {'status': 'fail', 'message': 'no title.'}
         rt.update({'usetime': '{0:.3f}'.format(time.time() - time_start)})
         #resp = make_response(json.dumps(rt, ensure_ascii=False), 200)
         resp = jsonify(rt)

@@ -76,11 +76,13 @@ $(document).ready(function() {
 			localStorage.setItem(_key, JSON.stringify(_data));
 
 	        var DATA = {data: JSON.stringify(_data)};
+            if (!localStorage.getItem('title')) return;
 	        for(i in __API){console.log(__API[i]);api_save(__API[i], DATA);}
 		}
 	}
 
 	function api_save(url, data){
+        if (!data.data.title]){console.log('save error: no title.');return;};
 	    var ajaxcb = function(response, status){console.log('save', status, response);}
 	    $.post(url, data, ajaxcb);
 	}
