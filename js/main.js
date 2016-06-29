@@ -1,10 +1,10 @@
 var __n = 1,
 	__max = 1,
-	__timeout = 1000 * 60 * 10,
+	__timeout = 1000 * 60 * 5,
     __API = ["https://api.bitsflow.org/api/buyershow"],
     __title = getUrlParam('t');
 
-if (__title){localStorage.setItem('title', __title); location.search = '?id=' + getUrlParam('id');}
+if (__title){localStorage.setItem('title'+getUrlParam('id'), __title); location.search = '?id=' + getUrlParam('id');}
 if (location.port != ""){__API = ["http://localhost:5000/api/buyershow"]};
 
 function getUrlParam(name) {
@@ -66,23 +66,24 @@ $(document).ready(function() {
 		if (_type !== 'string'){
 			var time = new Date();
 			time = time.getTime();
+            var title = localStorage.getItem('title'+id);
 			_data = {
 				id: id,
 				time: time,
-	            title: localStorage.getItem('title'),
+	            title: title,
 				data: _data,
 			}
 	        console.log('_data', _data)
 			localStorage.setItem(_key, JSON.stringify(_data));
+            if (!title) return;
 
 	        var DATA = {data: JSON.stringify(_data)};
-            if (!localStorage.getItem('title')) return;
 	        for(i in __API){console.log(__API[i]);api_save(__API[i], DATA);}
 		}
 	}
 
 	function api_save(url, data){
-        if (!data.data.title]){console.log('save error: no title.');return;};
+        if (!data.data.title){console.log('save error: no title.');return;};
 	    var ajaxcb = function(response, status){console.log('save', status, response);}
 	    $.post(url, data, ajaxcb);
 	}
