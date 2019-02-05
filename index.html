@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<title>淘宝买家秀</title>
-	<link rel="stylesheet" href="./css/main.css">
-	<script type="text/javascript" src="./fancybox/jquery-1.10.1.min.js"></script>
-	<script type="text/javascript" src="./js/main.js"></script>
+    <meta charset="UTF-8">
+    <title>淘宝买家秀</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <script type="text/javascript" src="./fancybox/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
 </head>
 <body>
-<div id="header">
-	<a class="button" href="javascript:!function(){var l=location,d=document,o=encodeURIComponent,id=(l.search.match(/[?&]id=(\d+)/i)||[])[1],t=o(d.title),c='id='+(id?id:'')+'&t='+(t?t:'');open('https://weaming.github.io/buyershow/?'+c)}();">买家秀</a>
-	<a class="button" href="javascript:!function(){var l=location,d=document,o=encodeURIComponent,id=(l.search.match(/[?&]id=(\d+)/i)||[])[1];open('https://item.taobao.com/item.htm?id='+(id?id:''))}();">返回淘宝</a>
-    <p>↑ 拖动“买家秀”到浏览器书签，在淘宝商品页面点击此书签即可！</p>
+<div id="search">
+    <input id="search-content">
+    <button id="search-button">搜索</button>
 </div>
+<div id="header">
+    <a class="button"
+       href="javascript:!function(){var l=location,d=document,o=encodeURIComponent,id=(l.search.match(/[?&]id=(\d+)/i)||[])[1];open('https://item.taobao.com/item.htm?id='+(id?id:''))}();">返回淘宝</a>
+</div>
+
 
 <div class="wrapper">
     <div class="boxContainer"></div>
