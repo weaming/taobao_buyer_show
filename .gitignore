@@ -2,3 +2,13 @@
 *.py[cd]
 env/
 *.lnk
+.idea/
+*.iml
+target/
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+/.apt_generated/
+/log_path_IS_UNDEFINED
